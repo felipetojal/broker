@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # devo usar o valor que ja esta no env
     ports:
-      - "5432:5432"
+      - "5433:5432"
     healthcheck:
       start_period: 10s
       test: pg_isready -U $${POSTGRES_USER} -d mercado
