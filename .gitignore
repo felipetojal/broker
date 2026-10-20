@@ -1,2 +1,1 @@
-.env.example
-POSTGRES_PASSWORD : pedro13
+.env
