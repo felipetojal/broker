@@ -1,3 +1,35 @@
 services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: mercado
+      POSTGRES_USER: shop
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # devo usar o valor que ja esta no env
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: pg_isready
+      interval: 2s #dois segundos de intervalo
+      retries: 3 #numero de tentativas maxiimas eu acho
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d:ro #para rodar o banco de dados
+    depends_on:
+      postgres:
+        condition: service_healthy
 
-  
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULTUSER: #Ambos vem do env
+      RABBITMQ_DEFAULTPASS:
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
