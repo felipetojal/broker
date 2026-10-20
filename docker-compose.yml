@@ -3,12 +3,12 @@ services:
     image: postgres:18
     environment:
       POSTGRES_DB: mercado
-      POSTGRES_USER: $${POSTGRES_USER}
-      POSTGRES_PASSWORD: $${POSTGRES_PASSWORD} # devo usar o valor que ja esta no env
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # devo usar o valor que ja esta no env
     ports:
       - "5432:5432"
     healthcheck:
-      test: pg_isready -U -d mercado
+      test: pg_isready -U $${POSTGRES_USER} -d mercado
       interval: 10s #dois segundos de intervalo
       retries: 3 #numero de tentativas maxiimas eu acho
     volumes:
@@ -22,15 +22,21 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      RABBITMQ_DEFAULT_USER: $${RABBITMQ_USER}#Ambos vem do env
-      RABBITMQ_DEFAULT_PASS: $${RABBITMQ_PASS}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER} #Ambos vem do env
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
     healthcheck:
       test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
     volumes:
-      - ./order-service
+      - rabbitmq_data:/var/lib/rabbitmq
+
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+
 
 
 
