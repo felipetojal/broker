@@ -8,12 +8,14 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
+      start_period: 10s
       test: pg_isready -U $${POSTGRES_USER} -d mercado
       interval: 10s #dois segundos de intervalo
       retries: 3 #numero de tentativas maxiimas eu acho
+    restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql
-      - ./db:/docker-entrypoint-initdb.d
+      - ./db:/docker-entrypoint-initdb.d:ro
 
 
   rabbitmq:
