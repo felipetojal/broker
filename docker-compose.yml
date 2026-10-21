@@ -16,9 +16,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./db:/docker-entrypoint-initdb.d:ro
-    profiles: ["dev"]
-    depends_on:
-      - healthcheck
+
 
 
 
@@ -46,6 +44,10 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    profiles: ["dev"]
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
