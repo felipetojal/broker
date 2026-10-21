@@ -1,12 +1,13 @@
 
-CREATE TABLE  users
+CREATE TABLE  users --para login e cadastro do usuario
 (                           --USUARIOS
-    id UUID DEFAULT gen_random_uuid() PRIMARY KEY ,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY , --sem coordenacao, nao vai ter gargalo quando mudar de DB
     username TEXT UNIQUE NOT NULL,
     senha_hash TEXT  NOT NULL, --as senhas nao precisam ser diferentes
     criado_em TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+--conta do cliente, carteira
 CREATE TABLE accounts
 (                                                                  --CONTAS
     user_id UUID PRIMARY KEY REFERENCES users(id),                            --cahve estrangeira ja declarada
@@ -26,14 +27,14 @@ CREATE TABLE assets
 
 
 --NOME DAS EMPRESAS DOS DOCUMENTOS
-INSERT INTO assets VALUES('ARA','aracaju','publico',2009);
-INSERT INTO assets VALUES('XLA','Xlag','espacial',453);
-INSERT INTO assets VALUES('SOS','Sosoft','saude', 102);
-INSERT INTO assets VALUES('APR','Appria', 'tecnologia',1452);
-INSERT INTO assets VALUES('VOK','Volkjeira','automobilistica',303);
+INSERT INTO assets VALUES('ARA','aracaju','publico',2090);
+INSERT INTO assets VALUES('XLA','Xlag','espacial',4530);
+INSERT INTO assets VALUES('SOS','Sosoft','saude', 1020);
+INSERT INTO assets VALUES('APR','Appria', 'tecnologia',14520);
+INSERT INTO assets VALUES('VOK','Volkjeira','automobilistica',3030);
 
 
---orders
+--orders, as ofertas e intencoes de compra
 CREATE TABLE orders
 (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,    --É PRIMARY KEY? DEVVE SER COMO SERIAL, VEJA!
@@ -51,7 +52,7 @@ CREATE TABLE orders
 
 
 
---positions
+--positions, a carteira
 CREATE TABLE positions
 (
 
@@ -60,17 +61,17 @@ CREATE TABLE positions
     quantidade INT NOT NULL  , --TALVEZ SEJA EM BIGINT, para cripto por exemplo
     reservada INT NOT NULL DEFAULT 0 CHECK(reservada>=0 AND reservada<=quantidade ),         --reservada vai ser o valor ou um estado(sim ou nao)?
     preco_medio BIGINT,
-    PRIMARY KEY(user_id,ticker))
+    PRIMARY KEY(user_id,ticker)
 );
 
 
---trades
+--trades, cada negociacao executadaa
 CREATE TABLE trades
 (
    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
    buy_order_id UUID NOT NULL REFERENCES orders(id),
-   sell_order_id UUID NOT NULL REFERENCES orders(id),,
-   ticker NOT NULL REFERENCES assets(ticker),
+   sell_order_id UUID NOT NULL REFERENCES orders(id),
+   ticker TEXT NOT NULL REFERENCES assets(ticker),
    preco BIGINT NOT NULL CHECK(preco>0),
    quantidade INT NOT NULL CHECK(quantidade>0),
    executado_em  TIMESTAMPTZ NOT NULL DEFAULT now()
