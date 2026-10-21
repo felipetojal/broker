@@ -35,6 +35,12 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
 
 
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+
+
 volumes:
   postgres_data:
   rabbitmq_data:
