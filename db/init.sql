@@ -65,21 +65,13 @@ CREATE TABLE positions
 
 
 --trades
---CREATE TABLE trades
---(
-    --deve ter o ID da trade unico,user id,valor da transacao,atualizar o saldo da conta FG com accounts
-    --, nome e sigla da acao FG de assets, quantidade, feita em
-   -- id_trade INT     PRIMARY KEY  NOT NULL, --mesma ideia do SERIAL, ver como vai fazer
-   -- user_id DEFAULT gen_random_uuid(),       --mesma ideia, vai pegar de onde?
-    --valor_transacao BIGINT ,
-    --atualizar_saldo BIGINT   NOT NULL,      --FG, pego o novo valor apos a transcacao e atualizo aconta
-   -- nome_acao TEXT     NOT NULL,            --FG
-  --  sigla TEXT     NOT NULL,--FG
-   -- quantidade INT    ,
-    --data_transacao TIMESTAMPTZ NOT NULL DEFAULT now()   ,
-    --FOREIGN KEY (user_id) REFERENCES accounts (user_id) ON DELETE SET NULL ON UPDATE CASCATE,
-   -- FOREIGN KEY (atualizar_saldo) REFERENCES accounts (saldo) ON DELETE SET NULL ON UPDATE CASCATE,
-   -- FOREIGN KEY (nome_acao) REFERENCES assets (nome_acao) ON DELETE SET NULL ON UPDATE CASCATE,
-    --FOREIGN KEY (sigla) REFERENCES assets (sigla) ON DELETE SET NULL ON UPDATE CASCATE
-
---);
+CREATE TABLE trades
+(
+   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+   buy_order_id UUID NOT NULL REFERENCES orders(id),
+   sell_order_id UUID NOT NULL REFERENCES orders(id),,
+   ticker NOT NULL REFERENCES assets(ticker),
+   preco BIGINT NOT NULL CHECK(preco>0),
+   quantidade INT NOT NULL CHECK(quantidade>0),
+   executado_em  TIMESTAMPTZ NOT NULL DEFAULT now()
+);
