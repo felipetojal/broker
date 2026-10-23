@@ -5,3 +5,4 @@ Um sistema distribuído de bolsa de valores de alta performance para processamen
 # Time
 
 * Luiz Felipe Tojal Gomes Corumba
+* Lucas Dantas Vasconcelos
